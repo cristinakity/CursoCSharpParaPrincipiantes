@@ -1,0 +1,221 @@
+# Contenido
+
+[TOC]
+
+# Parte 7 - Conversiones de tipos de datos en C#
+
+## [Parte 7][1]
+Hola bienvenidos a Pragim Technologies mi nombre es Cristina Carrasco, 
+esta es la parte 7: Conversiones de tipos de datos en C#
+
+
+## [Parte 7][2]
+En esta lección veremos:
+- Conversiones implícitas
+- Conversiones explícitas
+- Diferencia entre Parse() y TryParse()
+
+Veamos un ejemplo 
+### [vs][01]
+Digamos que tengo una variable de tipo entera inicializada en 100
+`int i = 100;`
+y tengo que convertir esta variable en tipo float, entonces
+tengo otra variable de tipo float
+`float f=` inicializare esta variable f con el valor de la variable i, entonces
+`float f = i;`
+
+Y voy a mostrar en pantalla el valor de f
+`Console.Writeline(f);`
+Ahora si corremos este codigo:
+la variable entera i es inicializa en 100, despues la variable f de tipo float toma el valor de i y el valor 100 es mostrado en pantalla.
+
+Entonces la conversion entre int y float esta sucediendo automaticamente sin que tengamos que hacer ninguna conversion explicita...
+
+Asi que lo que hicimos aqui fue convertir un entero en  punto flotante, aprendimos de lecciones anteriores que float es un tipo de dato mas grande que entero asi que obviamente cuando convertimos de entero a punto floatante no habra ninguna perdida de informacion y tampoco tendremos ninguna excepcion porque un valor int cabe dentro de un valor float.
+...
+Asi que la conversion implicita en C#... ¿Cuando es que pasa esta conversion implicita?
+
+## [Parte 7][3] 
+
+La conversión implícita es realiza por el compilador automaticamente, 
+Cuando no hay perdida de información si se realiza la conversión.
+Asi que obviamente podemos convertir de int a `float` y no abra perdida alguna de informacion.
+Y si no hay posibilidad de arrojar una excepción durante la conversión. 
+porque `float` puede almacenar un numero mas grande que int y no hay posibilidad de una excepcion de desbordamiento.
+Y es asi como la conversion se realiza de manera implicita, osea automaticamente sin que tengamos que definir que estamos haciendo una conversion de un tipo a otro tipo.
+
+### [vs][01]
+Ok, entonces pensemos en esto al reves, 
+digamos que tenemso una variable de tipo `float`
+`float f=` 
+la cual sera inicializada a 123.45
+<`float f = 123.45`> y como es una variable `float` tengo
+que indicarlo con el sufijo `f`
+`float f = 123.45f`
+Tambien tenemos otra variable de tipo int 
+`int i` y quiero inicializar esta con el valor de `f`
+`int i = f;`
+Si hago esto, miren tenemos un error: No se puede convertir implicitametne un tipo de dato `float` a `int`, 
+Y esto es porque como sabeos float es un tipo de dato mucho mas grande que el tipo `int` y tenemos la posibilidad de que el programa nos arroje una excepcion overflow o desbordamiento ya que un valor float puede no caber en una variable `int`.
+
+Con este ejemplo 123.45 este valor puede ser almacenado en un entero, porque entero si recorgamos el rango es mas grande que 123.45, asi que en este caso no tendremos un error de overflow, pero habra perdida de informcion, perderemos la parte decimal .45 porque float puede tener valores decimales  pero `int` no puede almacenar valores decimales.
+
+Para hacer la conversion explicita tenemos dos opciones:
+ - En este caso el compilador no hace la conversion automaticamente por nosotros...
+ porque habra una perdida de datos, por ejmeplo si 123.45 es una valor de una formula matematica, o un valor financiero, digamos que es un valor importante y deberia ser preciso por lo que necesitamos tener esos decimales en el resultado, asi que al hacer la conversion explicita estamos indicando que sabemos que habra una perdida de informacion. 
+La primera forma de hacer la conversion es 
+
+
+Por Ejemplo: Convertir un entero a un punto flotante no tiene ninguna perdida de información y tampoco arroja alguna excepción, por lo tanto se puede realizar una conversión implícita.
+
+Mientras que al convertir de punto flotante a entero si perdemos los valores decimales y además existe la posibilidad de tener excepción de desbordamiento  (`overflow`).  Por lo tanto en este caso necesitaremos hacer una conversión explícita.  Para las conversiones explicitas podemos utilizar el operador de conversión (**cast operator**) o la clase Convert.
+
+Asi que utilizaremos el type **cast operator**
+`int i = (int)f;` quiero convertir esta variable para que sea de tipo `(int)`
+y ahora si corro el programa, miren esto: aqui el programa nos esta mostrando en la consola el valor de la  variable float 123.45 pero ya convertido a entero osea 123 que seria solo la parte decimal y por lo tanto hemos perdido la parte fraccional .45 y es por esto que el compilador de C# no hace la conversion implicita por nosotros sino que tenemos que definir explicitamente que una variable float queremos que ahora sea int.
+
+La regla general es esta: si estamos convirtiendo de un tipo mas pequeño a uno mas grande la conversion implicita pasa automaticamente,
+pero por otro lado si tratamos de convertir un tipo de dato mas grande a uno mas pequeño y debido a que existe la posibilidad de que tengamos una exception de OverFlow o desbordamiento, y ademas existe la posibilidad de que perdamos informacion, es por esto que el compilador no hara la conversion implicita por nosotros y tenemos que hacer la conversion explicita nosotros
+
+Y una manera de hacer la conversion explicita es utilizar el type cast operator u operador de conversion, que es escribir el tipo de dato al que queremos convertir entre parentesis antes de la variable.
+
+y la otra manera de hacer la conversion explicita es utilizar la clase Convert, 
+por ejemplo:
+`int i = Convert.ToInt` y podemos ver diferentes versiones de `int` -> `int16`, `int32` y `int64`
+y que son estas versiones pues dependiendo del tamaño del tipo de dato entero, int64 significa que son 64 bits u 8bytes asi que es un numero mucho mas grande que 32 y 16, aqui utilizaremos `ToInt32`.
+Y si corro el programa veremos exactamente el mismo resultado que al utilizar el operador de conversion o cast opeator.
+
+Dentro de la clase Convert existen mucho metodos
+`Convert.`  Expandir intellisence 
+Si queremos convertir en decimal tendriamos que utilizar este metodo, si quremos convertir en char, boolean, entonces de cualquier tipo de dato a cualquier otro tipo de dato podemos hacer uso de esta clase Convert y obviamente seleccionar el metodo correspondiente dependiendo de a que tipo de dato queremos convertir y de este modo realizar la conversion explicita.
+
+¿Cual es la diferencia entre utilizar operador de conversion y la clase Convert?
+
+Si utilizo el operador de conversion o cast operator:
+`int i = (int)f;`
+
+y si esta variable float va a almacenar un numero mas grande que el tipo al que lo estoy convirtiendo, en este caso int 
+`float f = 1273754812123.45f;` <-- escribir  13 digitos
+Este numero es mas grande que lo que un entero puede almacenar, 
+si corro este codigo, cuando llegue a esta linea he intente convertir la variable f a int, esperariamos tener una excepcion porque una variable entera no puede almacenar este numero tan grande, pero veamos lo que pasa:
+
+Cuando ejecuto este programa, vean hay un valor negativo que es en realidad el valor minimo que puede almacenar una variable de tipo entero, 
+Lo interesante aqui es que como vemos el operador de conversion no nos arroja ninguna excepcion.
+
+Si intento hacer esta conversion entre float y entero si la conversion falla, solo va a tomar el valor minimo de int. 
+
+Entonces si utilziamos el operador de conversion o cast operator no obtendremos una excepcion pero si utilizamos la clase Conver
+t
+obtendremos la excepcion
+`int i = Convert.ToInt32(f);` <-- si utilizo `Convert.ToInt32`  y ejecuto el programa, vere la excepcion:
+
+OverFlow excepcion
+Obviamente este valor cuando inteto cconvertirlo en Int32 es demasiado grande y no cabe, por lo tanto la excepcion de overflow ocurrira.
+
+Entonces Existen dos maneras de realizar la conversion Explicita una es utilizando **operador de conversion** o **cast operator**, abrir y cerrar parentesis, y la otra utilizando la clase Convert y cualquiera de los metodos dentro de esta clase, segun sea la conversion qeu queramos realizar.
+La diferencia entre estas dos maneras es que con el cast operator no tendremos ninguna expcecion si la conversion falla, pero tendremos el valor minimo para el tipo de dato en lugar del valor que queremos convertir, y en el caso de la Clase Convert si tendremos una excepcion de tipo OverFlow o desbordamiento.
+
+## [Parte 7][3] 
+Bueno ya vimos las conversiones implicitas y explicitas
+
+
+## [Parte 7][4]
+Este es un ejemplo de conversion implicita, donde no hacemos nada solo pasamos una variable a otra.
+
+
+## [Parte 7][5]
+Y este es un ejemplo para la conversion explicita, y como vimmos hay dos maneras de hacer esta conversion, una es con el cast operator y la otra con la clase Convert, la diferencia es que la clase Convert arroja una excepcion si la conversion falla y el cast operator no.
+
+
+## [Parte 7][6]
+Y finalmente hay otra manera de realizar conversiones entre tipos de datos 
+## [vs][01]
+por ejemplo:
+El numero que tengo es un string, osea
+`string strNumero = "100";` <-- entonces basicamente esto es un numero, nosotros lo sabemos como seres humano al ver el valor sabemos que es un numero
+pero para la computadora este valor es un string o cadena de carateres.
+
+Entonces debido a que la variable es un string si yo intengo hacer esto:
+`int i = strNumero;`  <- el compilar arrojara un error diciendo que no podemos convertir implicitamente entre el tipo de dato string y entero
+
+Asi que tendremos que hacer la conversion explicita.
+Si el numero es un string hay una mejor manera de hacer la conversion explicita y esta es utilizanod el metodo Parse()
+
+Para convertir este strNumero a entero, utilizamos el metodo parse que esta dentro de la clase int, 
+`int.Parse(strNumero)` <-- y va a recibir como parametro un valor string, que seria el numero como tipo string y retornara un valor int que es el valor de ese string convertido a entero.
+
+Vamos a imprimir el valor:
+`Console.Writeline(i);` <-- y ejecutamos el codigo
+
+Bien esta es una tercer forma de convertir un tipo de dato a otro, especialmente si el tipo de dato es un numero representado por una variable string.
+
+Bueno vemos por ejemplo si por error tengo algunos digitos aqui, algunos caracteres alfabeticos:
+`string strNumero = "100TG";` <-- es este un numero valido, definitivamente no lo es.
+[11:30]
+Si voy he intento correr la aplicacion otra vez
+ahora cuando la aplicacion se ejecute y trate de convertir este string a un entero y no podra porque hay algunos caracteres que no son numeros, asi que tendremos una excepcion de formato.
+
+Corramos este programa y aqui vemos la excepcion de formato, o format excepcion que es lo que esperabamos.
+
+Bien, entonces ¿cómo evitamos esta excepcion?
+Hay una variacion del metodo parse y esta es el metodo TryParse()
+[12:10]	
+
+digamos por ejemplo que quiero convertir un string a entero utilizando tryParse
+
+`int.TryParse(`  veamos los parametros para este metodo
+
+Primero require un valor string, que seria el valor que queremos convertir a entero.
+`int.TryParse(strNumero,`
+Y como segundo parametro tenemos un parametro de salida o output parameter al ser un parametro de salida..
+
+Despues de que este metodo convierta este string a entero el resultado sera almacenado y retornado en este otro parametro que es output parameter o parametro de retorno o salida.
+
+entonces podemos crear y enviar una variable nueva que sera el parametro de retorno
+`int.TryParse(strNumero, out int resultado);`
+
+Este metodo TryParse va tomar el valor string convertirlo a entero y lo va guardar en esta variable que es un parametro out, las funciones pueden tener diferentes tipos de parametros, de valor, por referencia, out o salida, in o de entrada y arreglo de parametros... de los cuales hablaremos con mas detalle en futuras lecciones hasta entonces nose preocupen por eso.
+
+Entonces lo que pasa con tryParse va a convertir este string en entero y guadar el resultado en este parametro out, pero recordemos que este estring no puede ser convertido a entero porque no es un valor valido para un entero,
+entonces que va ha pasar con este out parametro?  
+
+pues mantendra el valor original, cero.
+
+Y algo interesante de TryParse es que esta funcion retornara un valor boleano, indicando si la conversion fue posible o no.
+Esto significa que TryParse regresara verdadero si el string pudo ser convertido a entero y falso en caso contrario.
+
+podemos asignar ese valor de retorno a una variable bolean
+`bool sePuedeConvertir = int.TryParse( strNumero, out int resultado )`
+
+con esta variable podemos validar si fue posbile al conversion o no
+```csharp
+if (sePuedeConvertir) //Si la conversion fue posible sabemos que habra una valor en la varaible resultado y lo podemos mostrar en pantalla
+{
+	Console.WriteLine(resultado)
+}else  //Si no se pudo convertir mostramos un mensaje en pantalla
+{
+	Console.WriteLine($"El string \"{strNumero}\" no es un entero valido.\nPor favor ingrese un numero valido.");
+}
+```
+
+Si ejecutamos el programa, podmeos ver que este metodo no nos retorno una excepcion pero la variable sePuedeConvertir es falsa y vemos el mensaje que pusimos dentro del else.
+
+Ahora si ponemos un valor que si se puede convertir:
+
+`string strNumero = "9987"`
+y ejecutamos el programa, deberiamo de ver el valor de la variable resultado en la consola.
+
+Basicamente esta es la diferencia entre `Parse` y `TryParse`.
+
+## [Parte 7][6]
+Entonces si el numero esta represantado dentro de una variable string tenemos dos opciones para convertirlo a cualquier tipo de dato numerico puede ser a entero, float, double, el que sea necesario... 
+`Parse` y `TryParse`
+`Parse` arrojara una excepsion si el valor string no puede ser convertido
+mientras que `TryParse` retornara un valor booleano indicando si la conversion fue posible o no y no arrojara ninguna excepcion, ademas almacenara el resultado en el parametro de tipo `out` que le pasaremos a la funcion.
+
+Sabiendo esto podemos utilizar parse cuando estamos seguros que el valor puede ser convertido sin ninguna excepcion de lo contrario es mejor utilizar `TryParse`
+
+## [Parte 7][7] 
+Esto es todo por hoy muchas gracias por ver este video, y recuerden para recursos adicionales porfavor revisen la pagina web en Pragimtech.com,
+
+Te deseo que tengas un excelente dia :)
